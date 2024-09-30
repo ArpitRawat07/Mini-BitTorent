@@ -25,13 +25,14 @@ namespace fs = std::filesystem;
  */
 enum class MessageType
 {
-    REQUEST,  // Message requesting a file
-    ACK,      // Acknowledgment message
-    DATA,     // Data message containing file chunks
-    COMPLETE, // Message indicating file transfer is complete
-    ERROR_,   // Error message
-    STATUS,   // Status message
-    UNKNOWN   // Unknown message type
+    REQUEST,   // Message requesting a file
+    ACK,       // Acknowledgment message
+    DATA,      // Data message containing file chunks
+    COMPLETE,  // Message indicating file transfer is complete
+    HANDSHAKE, // Handshake message
+    ERROR_,    // Error message
+    STATUS,    // Status message
+    UNKNOWN    // Unknown message type
 };
 
 /*
@@ -51,14 +52,8 @@ public:
      *  @param uploadDir: Directory for uploaded files.
      *  @param downloadDir: Directory for downloaded files.
      */
-    Peer(const std::string &ip, int port, const std::string &trackerIp, int trackerPort,
+    Peer(const std::string &ip, int port, const std::string &id, const std::string &trackerIp, int trackerPort,
          const std::string &uploadDir, const std::string &downloadDir);
-
-    // Move Constructor for transferring ownership of resources
-    Peer(Peer &&other) noexcept;
-
-    // Move Assignment Operator for transferring ownership of resources
-    Peer &operator=(Peer &&other) noexcept;
 
     // Destructor to clean up resources
     ~Peer();
@@ -168,6 +163,14 @@ public:
      */
     bool isPeerConnected(const std::string &peerIP, int peerPort);
 
+    /*
+     *  sendHandshake
+     *  @brief: Sends a handshake message to a connected peer after establishing a connection.
+     *  @param connectedPeerSocket: The socket for the connected peer.
+     *  @param listeningPort: The port number on which the peer is listening for incoming connections.
+     */
+    void sendHandshake(SOCKET connectedPeerSocket, int listeningPort, SOCKET listeningSocket);
+
     // Structure representing a connected peer
     struct PeerInfo
     {
@@ -209,6 +212,9 @@ public:
     // Peer's port number
     int peerPort;
 
+    // Peer's id
+    std::string peerId;
+
     // Size of the file being shared
     std::size_t fileSize;
 
@@ -220,6 +226,13 @@ public:
 
     // Mutex for ensuring thread-safe operations
     std::mutex mtx;
+
+    // Mutex to protect shared resources
+    std::mutex peerMutex;             // Mutex for protecting peer connections
+    std::mutex fileMutex;             // Mutex for protecting file-related operations
+    std::ofstream outputDownloadFile; // Ensure you have an output download file stream
+    std::ofstream outputUploadFile;   // Ensure you have an output upload file stream
+    std::string currentFilename;      // Keep track of the current file being received
 
     /*
      *  listenForMessages
@@ -243,6 +256,24 @@ public:
      *  @param connectedPeerSocket: The socket for the peer that sent the message.
      */
     void processMessage(const std::string &message, SOCKET connectedPeerSocket);
+
+    /*
+     *  showConnectedPeers
+     *  @brief: Displays the details of all currently connected peers.
+     */
+    void showConnectedPeers();
+
+    /*
+     *  showfilePeers
+     *  @brief: Displays the list of peers available for each file.
+     */
+    void showfilePeers();
+
+    /*
+     *  showMyInfo
+     *  @brief: Displays the details of the peer itself.
+     */
+    void showMyInfo();
 };
 
 #endif // PEER_H
