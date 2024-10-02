@@ -2,6 +2,8 @@
 
 ## Overview
 
+![Mini-BitTorrent](BitTorrent.drawio.png)
+
 I created **Mini BitTorrent**, a lightweight implementation of the BitTorrent protocol that allows users to share files efficiently over a peer-to-peer network. This project includes a **Tracker** that manages active peers and their shared files, as well as **Peer** instances that can connect to the tracker and to each other to exchange files.
 
 My goal with this project was to provide a simple yet effective way to understand how BitTorrent works while showcasing essential concepts in networking and multithreading.
