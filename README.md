@@ -66,7 +66,7 @@ The `Peer` class represents an individual node in the BitTorrent network. Each p
    git clone https://github.com/ArpitRawat07/Mini-BitTorent.git
    cd Mini-BitTorent
    ```
-2. Compile the code:
+2. Compile and run the appplication as follows:
 
 **Tracker**
 ```
@@ -79,8 +79,6 @@ g++ -o <TrackerID> Tracker.cpp -lws2_32
 g++ -o <PeerID> Peer.cpp -lws2_32
 <PeerID>.exe
 ```
-
-4. Run the tracker and peer applications as needed.
 
 ### Note
 ![Associating folders with peer](Mini-Bittorrent2.png)
