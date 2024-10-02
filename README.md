@@ -71,11 +71,13 @@ The `Peer` class represents an individual node in the BitTorrent network. Each p
 **Tracker**
 ```
 g++ -o <TrackerID> Tracker.cpp -lws2_32
+<TrackerID>.exe
 ```
 
 **Peer**
 ```
 g++ -o <PeerID> Peer.cpp -lws2_32
+<PeerID>.exe
 ```
 
 4. Run the tracker and peer applications as needed.
